@@ -5,7 +5,6 @@ import { AppService } from './app.service';
 import {AppConfig, DatabaseConfig } from './config';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { join } from 'path';
 import { UsersModule } from './users/users.module';
 
 @Module({
