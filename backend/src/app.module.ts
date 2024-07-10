@@ -4,23 +4,33 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { join } from 'path';
+import { UsersModule } from './users/users.module';
 
 @Module({
     imports: [
-        ConfigModule.forRoot(), // Load .env file
-        TypeOrmModule.forRoot({
-            type: 'postgres',
-            host: process.env.DB_HOST,
-            port: parseInt(process.env.DB_PORT, 10),
-            username: process.env.DB_USERNAME,
-            password: process.env.DB_PASSWORD,
-            database: 'postgres',
-            entities: ['dist/**/**/*.entity{.ts,.js}'],
-            synchronize: true,
-            logging: true,
+        ConfigModule.forRoot(), // Load .env file that contains dabase info
+        TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (configService: ConfigService) => ({
+                type: 'postgres',
+                host: configService.get('DB_HOST'),
+                port: +configService.get('DB_PORT'),
+                username: configService.get('DB_USERNAME'),
+                password: configService.get('DB_PASSWORD'),
+                database: configService.get('DB_NAME'),
+                entities: [join(process.cwd(), 'dist/**/*.entity.js')],
+                migrations: [join(process.cwd(), '/migration/*{.ts,.js}')],
+                cli: {
+                    migrationsDir: 'src/migration',
+                },
+                synchronize: false, // Disable synchronize in production
+            })
         }),
         AuthModule,
+        UsersModule,
     ],
     controllers: [AppController],
     providers: [AppService],
