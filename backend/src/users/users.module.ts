@@ -3,6 +3,8 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { UserGroup } from './entities/group.entity';
+import { Task } from './entities/task.entity';
 
 // Login
 import { PassportModule } from '@nestjs/passport';
@@ -24,7 +26,7 @@ import { ConfigService } from '@nestjs/config';
                 };
             },
         }),
-        TypeOrmModule.forFeature([User])
+        TypeOrmModule.forFeature([User, UserGroup, Task])
     ],
     controllers: [UsersController],
     providers: [UsersService],

@@ -21,7 +21,7 @@
     "typeorm": "ts-node --require tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:run": "npm run typeorm migration:run -- -d ./db/typeorm.config.ts",
     "migration:generate": "npm run typeorm -- -d ./db/typeorm.config.ts migration:generate ./db/migrations/%npm_config_name%",
-    "migration:create": "npm run typeorm -- migration:create ./db/migrations/$npm_config_name",
+    "migration:create": "npm run typeorm -- migration:create ./db/migrations/$npm_config_name%",
     "migration:revert": "npm run typeorm -- -d ./db/typeorm.config.ts migration:revert",
     "migration:show": "npm run typeorm -- migration:show -d ./db/typeorm.config.ts"
   },
@@ -38,13 +38,15 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.5",
+    "nest-winston": "^1.9.7",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^8.12.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
-    "typeorm-naming-strategies": "^4.1.0"
+    "typeorm-naming-strategies": "^4.1.0",
+    "winston": "^3.13.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

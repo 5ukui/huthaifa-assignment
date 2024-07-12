@@ -1,6 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { UserGroup } from './group.entity';
+import { Task } from './task.entity';
 
-@Entity({ name: 'User' })
+@Entity()
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -13,4 +15,14 @@ export class User {
 
     @Column({ nullable: false })
     password: string;
+
+    @ManyToOne(() => UserGroup, userGroup => userGroup.users)
+    userGroup: UserGroup;
+
+    @OneToMany(() => Task, task => task.assignedBy)
+    tasksAssigned: Task[];
+
+    @OneToMany(() => Task, task => task.assignedTo)
+    tasksReceived: Task[];
+    
 }

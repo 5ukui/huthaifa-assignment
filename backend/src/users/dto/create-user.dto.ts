@@ -19,4 +19,7 @@ export class CreateUserDto {
         message: 'Password too weak. It must be at least 6 characters long, contain at least one uppercase letter, one number, and one special character.',
     })
     password: string;
+
+    @IsNotEmpty()
+    userGroupId: number;
 }

@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { UserGroup } from './entities/group.entity';
+import { Task } from './entities/task.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -15,17 +16,30 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private usersRepository: Repository<User>,
+        @InjectRepository(UserGroup)
+        private userGroupRepository: Repository<UserGroup>,
+        @InjectRepository(Task)
+        private taskRepository: Repository<Task>,
         private jwtService: JwtService,
     ) {}
 
-    // Hash password before storing it in the database
     async create(singupDto: CreateUserDto): Promise<{ user: User, token: string }> {
+        const { username, email, password, userGroupId } = singupDto;
         const saltOrRounds = 10;
-        const hashedPassword = await bcrypt.hash(singupDto.password, saltOrRounds);
+        // Hash password before storing it in the database
+        const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+
+        // Find user group by id
+        const userGroup = await this.userGroupRepository.findOne({ where: { id: userGroupId } });
+        if (!userGroup) {
+            throw new UnauthorizedException('User group not found');
+        }
+        
         const user = new User();
-        user.username = singupDto.username;
-        user.email = singupDto.email;
+        user.username = username;
+        user.email = email;
         user.password = hashedPassword;
+        user.userGroup = userGroup;
 
         const savedUser = await this.usersRepository.save(user);
         const token = this.jwtService.sign({ username: savedUser.username, sub: savedUser.id });
@@ -47,21 +61,5 @@ export class UsersService {
             return { token };
         }
         throw new UnauthorizedException('Invalid email of password');
-    }
-
-    findAll() {
-        return `This action returns all users`;
-    }
-
-    findOne(id: number) {
-        return `This action returns a #${id} user`;
-    }
-
-    update(id: number, updateUserDto: UpdateUserDto) {
-        return `This action updates a #${id} user`;
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} user`;
     }
 }
