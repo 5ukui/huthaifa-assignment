@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,6 +8,7 @@ import { UserGroup } from './entities/group.entity';
 import { Task } from './entities/task.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { AssignTaskDto } from './dto/create-task.dto';
 
 
 
@@ -61,5 +62,38 @@ export class UsersService {
             return { token };
         }
         throw new UnauthorizedException('Invalid email of password');
+    }
+
+    async assignTask(assignTaskDto: AssignTaskDto, assignedByUserId: number): Promise<Task> {
+        const { title, description, assignedToUserId } = assignTaskDto;
+    
+        const assignedByUser = await this.usersRepository.findOne({ where: { id: assignedByUserId }, relations: ['userGroup'] });
+        const assignedToUser = await this.usersRepository.findOne({ where: { id: assignedToUserId } });
+        
+        if (!assignedByUser) {
+            throw new NotFoundException('Assigning user not found');
+        }
+    
+        if (!assignedToUser) {
+            throw new NotFoundException('User to be assigned not found');
+        }
+    
+        // Check if the assigning user is an admin
+        if (assignedByUser.userGroup.name !== 'admin') {
+            throw new ForbiddenException('Only admins can assign tasks');
+        }
+    
+        const task = new Task();
+        task.title = title;
+        task.description = description;
+        task.status = 'pending'; // Default status
+        task.assignedBy = assignedByUser;
+        task.assignedTo = assignedToUser;
+    
+        return this.taskRepository.save(task);
+    }
+
+    async findOneById(id: number): Promise<User> {
+        return await this.usersRepository.findOne({ where: { id } });
     }
 }
