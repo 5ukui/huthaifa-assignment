@@ -348,7 +348,11 @@ cd huthaifa-assignment\frontend
 ```
 npm install
 ```
-3. Run the server:
+3. Create the frontend's .env file and add the backend server's port:
+```
+REACT_APP_API_URL=http://localhost:5000/
+```
+4. Run the server:
 ```
 npm run start
 ```
