@@ -17,10 +17,11 @@ const Navbar = () => {
         <div className="p-4 flex justify-between w-full">
 
             {/* Brand Logo */}
-            <div>
-            <Link to="/">
-                <img src={logo} alt="navbarbrand" className="w-[100px]" />
-            </Link>
+            <div className="flex items-center">
+                <Link to="/">
+                    <img src={logo} alt="navbarbrand" className="w-[100px]" />
+                </Link>
+                <h1 className="text-[32px]">📋</h1>
             </div>
 
             {/* Menu links */}
@@ -36,10 +37,6 @@ const Navbar = () => {
                             {user}
                         </button>
                         <div className={`absolute right-0 z-10 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg w-48 ${isOpen ? 'fadeIn' : 'fadeOut'}`}>
-                            <div className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 lowercase">
-                                <li>Signed in as </li>
-                                <li>{user} 👋</li>
-                            </div>
                             <div className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">
                                 <Link to="/profile" className="hover:text-gray-700">
                                     Profile
