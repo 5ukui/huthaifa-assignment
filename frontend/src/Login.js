@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from './services/api';
+import { AuthContext } from './context/AuthContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/login', { email, password });
-            // Handle successful login
-            console.log(response.data);
-            localStorage.setItem('token', response.data.token);
+            await login({ email, password });
             navigate('/'); // Redirect to home
         } catch (error) {
             console.log(error);

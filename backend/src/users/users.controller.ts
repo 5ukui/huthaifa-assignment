@@ -20,6 +20,12 @@ export class UsersController {
         return this.usersService.login(loginDto);
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get('user')
+    async user(@Req() req) {
+        return req.user.username;
+    }
+
 
     // TASKS ENDPOINTS
     @UseGuards(JwtAuthGuard)

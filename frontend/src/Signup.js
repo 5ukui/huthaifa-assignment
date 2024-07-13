@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from './services/api';
+import { AuthContext } from './context/AuthContext';
 
 const Signup = () => {
     const [username, setUsername] = useState('');
@@ -8,14 +8,13 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { signup } = useContext(AuthContext);
+
   
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/register', { username, email, password });
-            // Handle successful sign up
-            console.log(response.data);
-            localStorage.setItem('token', response.data.token);
+            await signup({ username, email, password });
             navigate('/'); // Redirect to home
         } catch (error) {
             setError("Error signing up");
