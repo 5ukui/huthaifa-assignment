@@ -64,6 +64,10 @@ export class UsersService {
         throw new UnauthorizedException('Invalid email of password');
     }
 
+    async getTasks(userId: number): Promise<Task[]> {
+        return await this.taskRepository.find({ where: { assignedTo: { id: userId } }, relations: ['assignedBy', 'assignedTo'] });
+    }
+
     async assignTask(assignTaskDto: AssignTaskDto, assignedByUserId: number): Promise<Task> {
         const { title, description, assignedToUserId } = assignTaskDto;
     

@@ -9,6 +9,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
+    // AUTHENTICATION ENDPOINTS
     @Post('register')
     async register(@Body() createUserDto: CreateUserDto) {
         return this.usersService.create(createUserDto);
@@ -17,6 +18,14 @@ export class UsersController {
     @Post('login')
     async login(@Body() loginDto: LoginUserDto) {
         return this.usersService.login(loginDto);
+    }
+
+
+    // TASKS ENDPOINTS
+    @UseGuards(JwtAuthGuard)
+    @Get('tasks')
+    async getTasks(@Req() req) {
+        return this.usersService.getTasks(req.user.userId);
     }
 
     @UseGuards(JwtAuthGuard)
