@@ -339,3 +339,16 @@ npm run migration:run
 ```
 npm run start:dev
 ```
+### For the frontend
+1. Change directory into frontend:
+```
+cd huthaifa-assignment\frontend
+```
+2. Install the dependencies:
+```
+npm install
+```
+3. Run the server:
+```
+npm run start
+```
