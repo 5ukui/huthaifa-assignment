@@ -15,7 +15,7 @@ const Navbar = () => {
     return (
         <nav className="bg-white flex fixed w-full top-0 z-50 border-2">
         <div className="p-4 flex justify-between w-full">
-
+            
             {/* Brand Logo */}
             <div className="flex items-center">
                 <Link to="/">
@@ -43,8 +43,8 @@ const Navbar = () => {
                                 </Link>
                             </div>
                             <div className="px-4 py-2 text-sm text-red-700 hover:bg-gray-100 text-center">
-                                <button onClick={logout} className="">
-                                    LOGOUT
+                                <button onClick={logout} className="uppercase">
+                                    Logout
                                 </button>
                             </div>
                         </div>

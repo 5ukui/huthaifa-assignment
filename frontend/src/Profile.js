@@ -1,17 +1,17 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from './context/AuthContext';
 
-const Home = () => {
-    const { user, tasks, getTasks } = useContext(AuthContext);
+const Profile = () => {
+    const { user, profile, getProfile } = useContext(AuthContext);
     useEffect(() => {
         if (user) {
-            getTasks();
+            getProfile();
         }
-    }, [user]);
+    }, []);
     
     useEffect(() => {
-        console.log(tasks);
-    }, [tasks]);
+        console.log(profile);
+    }, []);
 
     return (
         <div className="h-screen flex bg-white pt-20">
@@ -31,4 +31,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Profile;

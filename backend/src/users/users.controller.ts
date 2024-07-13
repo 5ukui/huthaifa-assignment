@@ -20,10 +20,17 @@ export class UsersController {
         return this.usersService.login(loginDto);
     }
 
+    // USER ENDPOINTS
     @UseGuards(JwtAuthGuard)
     @Get('user')
     async user(@Req() req) {
         return req.user.username;
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('profile')
+    async profile(@Req() req) {
+        return this.usersService.findOneById(req.user.userId);
     }
 
 

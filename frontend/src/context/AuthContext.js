@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [tasks, setTasks] = useState([]);
+    const [profile, setProfile] = useState([]);
 
     useEffect(() => {
         const checkUser = async () => {
@@ -71,8 +72,24 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const getProfile = async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const response = await api.get('/profile', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setProfile(response.data);
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ user, tasks, login, signup, logout, getTasks }}>
+        <AuthContext.Provider value={{ user, login, signup, logout, tasks, getTasks, getProfile, profile }}>
             {children}
         </AuthContext.Provider>
     );
